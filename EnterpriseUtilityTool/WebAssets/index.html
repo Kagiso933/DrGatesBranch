@@ -1,0 +1,1646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr Gates</title>
+    <!-- Lucide Icons - LOCAL FILE (download from https://unpkg.com/lucide@latest/dist/umd/lucide.min.js) -->
+    <script src="lucide.min.js"></script>
+    <style>
+        :root {
+            /* Harmonious Color Palette - Flowing Blues to Purples */
+            --primary-start: #5B86E5;
+            --primary-end: #36D1DC;
+            --secondary-start: #667eea;
+            --secondary-end: #764ba2;
+            --accent-start: #4facfe;
+            --accent-end: #00f2fe;
+            
+            /* Status Colors - Harmonious */
+            --success-start: #11998e;
+            --success-end: #38ef7d;
+            --warning-start: #f2994a;
+            --warning-end: #f2c94c;
+            --error-start: #eb3349;
+            --error-end: #f45c43;
+            --info-start: #4facfe;
+            --info-end: #00f2fe;
+            
+            /* Modern Gradients */
+            --gradient-primary: linear-gradient(135deg, var(--primary-start) 0%, var(--primary-end) 100%);
+            --gradient-secondary: linear-gradient(135deg, var(--secondary-start) 0%, var(--secondary-end) 100%);
+            --gradient-accent: linear-gradient(135deg, var(--accent-start) 0%, var(--accent-end) 100%);
+            --gradient-success: linear-gradient(135deg, var(--success-start) 0%, var(--success-end) 100%);
+            --gradient-warning: linear-gradient(135deg, var(--warning-start) 0%, var(--warning-end) 100%);
+            --gradient-error: linear-gradient(135deg, var(--error-start) 0%, var(--error-end) 100%);
+            --gradient-info: linear-gradient(135deg, var(--info-start) 0%, var(--info-end) 100%);
+            
+            /* Backgrounds */
+            --bg-app: #0a0e27;
+            --bg-card: rgba(255, 255, 255, 0.03);
+            --bg-card-hover: rgba(255, 255, 255, 0.06);
+            --bg-elevated: rgba(255, 255, 255, 0.08);
+            
+            /* Text Colors */
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.8);
+            --text-tertiary: rgba(255, 255, 255, 0.6);
+            --text-muted: rgba(255, 255, 255, 0.4);
+            
+            /* Glass Effect */
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            
+            /* Shadows & Glows */
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+            --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.6);
+            
+            --glow-primary: 0 0 30px rgba(91, 134, 229, 0.4);
+            --glow-success: 0 0 30px rgba(56, 239, 125, 0.4);
+            --glow-warning: 0 0 30px rgba(242, 201, 76, 0.4);
+            --glow-error: 0 0 30px rgba(244, 92, 67, 0.4);
+            
+            /* Border Radius */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+        }
+
+        .company-logo {
+            height: 32px;
+            width: auto;
+            margin-right: 16px;
+            filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Inter", "Segoe UI Variable", -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 14px;
+            color: var(--text-primary);
+            background: var(--bg-app);
+            overflow-x: hidden;
+            line-height: 1.6;
+            position: relative;
+        }
+
+        /* Animated Background Pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(91, 134, 229, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(54, 209, 220, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(102, 126, 234, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+            animation: bgShift 20s ease infinite;
+        }
+
+        @keyframes bgShift {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Modern Toast Notifications */
+        .notification {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            padding: 16px 24px;
+            border-radius: var(--radius-lg);
+            font-size: 13px;
+            font-weight: 500;
+            z-index: 9999;
+            box-shadow: var(--shadow-xl);
+            animation: slideInNotification 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            max-width: 420px;
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .notification i {
+            width: 20px;
+            height: 20px;
+        }
+
+        .notification::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.9;
+            z-index: -1;
+        }
+
+        .notification-success::before {
+            background: var(--gradient-success);
+        }
+
+        .notification-warning::before {
+            background: var(--gradient-warning);
+        }
+
+        .notification-error::before {
+            background: var(--gradient-error);
+        }
+
+        .notification-info::before {
+            background: var(--gradient-info);
+        }
+
+        @keyframes slideInNotification {
+            from {
+                transform: translateX(500px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Modern Header */
+        .header {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 24px 32px;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 50;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .system-info {
+            font-size: 12px;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        /* Admin Badge - Always Green (App Always Elevated) */
+        .admin-badge {
+            background: var(--gradient-success);
+            color: white;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            box-shadow: var(--shadow-md), var(--glow-success);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .admin-badge i {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Modern Tab Navigation */
+        .tab-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            padding: 0 32px;
+            gap: 8px;
+            position: relative;
+            z-index: 40;
+        }
+
+        .tab {
+            background: transparent;
+            border: none;
+            padding: 16px 24px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-secondary);
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 600;
+            border-radius: var(--radius-md) var(--radius-md) 0 0;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab i {
+            width: 18px;
+            height: 18px;
+        }
+
+        .tab:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .tab.active {
+            color: var(--text-primary);
+            background: rgba(91, 134, 229, 0.15);
+            border-bottom-color: var(--primary-start);
+        }
+
+        .tab.active::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--gradient-primary);
+            box-shadow: var(--glow-primary);
+        }
+
+        .main-content {
+            padding: 32px;
+            max-width: 1600px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeInContent 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes fadeInContent {
+            from { 
+                opacity: 0; 
+                transform: translateY(20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        /* Modern Glassmorphic Cards */
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid var(--glass-border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(91, 134, 229, 0.08) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg), var(--glow-primary);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .card-icon {
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gradient-primary);
+            color: white;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md), var(--glow-primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-icon i {
+            width: 28px;
+            height: 28px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .card-icon::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.3px;
+        }
+
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* Modern Gradient Buttons */
+        button {
+            padding: 14px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            color: var(--text-primary);
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        button i {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 0;
+        }
+
+        button span {
+            position: relative;
+            z-index: 1;
+        }
+
+        button:hover:not(:disabled)::before {
+            opacity: 0.8;
+        }
+
+        button:hover:not(:disabled) {
+            transform: translateX(8px);
+            box-shadow: var(--shadow-md), var(--glow-primary);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        button:active {
+            transform: translateX(8px) scale(0.98);
+        }
+
+        button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        button.secondary {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        button.secondary::before {
+            background: var(--gradient-accent);
+        }
+
+        button.danger::before {
+            background: var(--gradient-error);
+        }
+
+        button.danger:hover {
+            box-shadow: var(--shadow-md), var(--glow-error);
+        }
+
+        /* Admin Required Buttons */
+        button.admin-required {
+            border: 2px solid transparent;
+            background: var(--glass-bg);
+            position: relative;
+        }
+
+        button.admin-required::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: var(--radius-md);
+            padding: 2px;
+            background: var(--gradient-warning);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        button.admin-required:hover::after {
+            opacity: 1;
+        }
+
+        .button-admin-badge {
+            margin-left: auto;
+            background: var(--gradient-warning);
+            color: white;
+            font-size: 9px;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            box-shadow: var(--shadow-sm), var(--glow-warning);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+
+        .button-admin-badge i {
+            width: 10px;
+            height: 10px;
+        }
+
+        /* Modern Health Display */
+        .health-display {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 24px;
+            border: 1px solid var(--glass-border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .health-display::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(79, 172, 254, 0.05) 0%, transparent 100%);
+            pointer-events: none;
+        }
+
+        .health-display h2 {
+            margin-bottom: 24px;
+            color: var(--text-primary);
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            font-size: 22px;
+        }
+
+        .health-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .health-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 24px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .health-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--gradient-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .health-item:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .health-item:hover::before {
+            opacity: 1;
+        }
+
+        .health-icon {
+            width: 64px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+        }
+
+        .health-icon i {
+            width: 32px;
+            height: 32px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .health-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            opacity: 0.15;
+            z-index: 1;
+        }
+
+        .health-icon.success {
+            color: var(--success-end);
+        }
+
+        .health-icon.success::before {
+            background: var(--gradient-success);
+            box-shadow: var(--glow-success);
+        }
+
+        .health-icon.warning {
+            color: var(--warning-end);
+        }
+
+        .health-icon.warning::before {
+            background: var(--gradient-warning);
+            box-shadow: var(--glow-warning);
+        }
+
+        .health-icon.error {
+            color: var(--error-end);
+        }
+
+        .health-icon.error::before {
+            background: var(--gradient-error);
+            box-shadow: var(--glow-error);
+        }
+
+        .health-icon.pending {
+            color: var(--info-end);
+        }
+
+        .health-icon.pending::before {
+            background: var(--gradient-info);
+            box-shadow: 0 0 30px rgba(79, 172, 254, 0.4);
+        }
+
+        .health-text h3 {
+            font-size: 13px;
+            color: var(--text-tertiary);
+            margin-bottom: 6px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .health-text p {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.2px;
+        }
+
+        .status-details {
+            font-size: 11px;
+            color: var(--text-muted);
+            display: block;
+            margin-top: 4px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Enhanced Status Card Styling */
+        .health-item.status-checking::before {
+            background: var(--gradient-warning);
+            opacity: 1;
+        }
+
+        .health-item.status-connected::before,
+        .health-item.status-active::before,
+        .health-item.status-healthy::before {
+            background: var(--gradient-success);
+            opacity: 1;
+        }
+
+        .health-item.status-error::before,
+        .health-item.status-critical::before {
+            background: var(--gradient-error);
+            opacity: 1;
+        }
+
+        .health-item.status-warning::before,
+        .health-item.status-inactive::before {
+            background: var(--gradient-warning);
+            opacity: 1;
+        }
+
+        /* Status-specific text colors */
+        .health-item.status-connected p,
+        .health-item.status-active p,
+        .health-item.status-healthy p {
+            background: var(--gradient-success);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .health-item.status-error p,
+        .health-item.status-critical p {
+            background: var(--gradient-error);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .health-item.status-warning p,
+        .health-item.status-inactive p {
+            background: var(--gradient-warning);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .health-item.status-checking p {
+            background: var(--gradient-info);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Pulsing Animation */
+        @keyframes pulseModern {
+            0%, 100% { 
+                opacity: 1;
+                transform: scale(1);
+                box-shadow: 0 0 30px rgba(79, 172, 254, 0.4);
+            }
+            50% { 
+                opacity: 0.7;
+                transform: scale(0.95);
+                box-shadow: none;
+            }
+        }
+
+        .health-item.status-checking .health-icon {
+            animation: pulseModern 2s ease-in-out infinite;
+        }
+
+        /* Modern Activity Log */
+        .activity-log-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            box-shadow: var(--shadow-md);
+            margin-top: 24px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .log-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .log-header h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.3px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .log-header h3 i {
+            width: 20px;
+            height: 20px;
+        }
+
+        .log-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .log-controls button {
+            padding: 8px 16px;
+            font-size: 13px;
+        }
+
+        .activity-log {
+            background: linear-gradient(135deg, rgba(10, 14, 39, 0.9) 0%, rgba(20, 25, 50, 0.9) 100%);
+            color: #E0E0E0;
+            font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+            font-size: 13px;
+            padding: 24px;
+            border-radius: var(--radius-md);
+            height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            line-height: 1.6;
+            box-shadow: inset 0 2px 16px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(91, 134, 229, 0.2);
+            position: relative;
+        }
+
+        .activity-log::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: var(--gradient-primary);
+            box-shadow: var(--glow-primary);
+        }
+
+        .activity-log::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        .activity-log::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: var(--radius-md);
+        }
+
+        .activity-log::-webkit-scrollbar-thumb {
+            background: var(--gradient-primary);
+            border-radius: var(--radius-md);
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            box-shadow: var(--glow-primary);
+        }
+
+        .activity-log::-webkit-scrollbar-thumb:hover {
+            box-shadow: var(--glow-primary), var(--shadow-md);
+        }
+
+        /* Modern Support Banner */
+        .support-banner {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 32px;
+            border-radius: var(--radius-lg);
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-lg), var(--glow-primary);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .support-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: rotateBg 20s linear infinite;
+        }
+
+        @keyframes rotateBg {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .support-banner h3 {
+            font-size: 22px;
+            margin-bottom: 16px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .support-banner h3 i {
+            width: 24px;
+            height: 24px;
+        }
+
+        .support-info {
+            display: flex;
+            gap: 32px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+
+        .support-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .support-item i {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Focus States */
+        button:focus-visible,
+        .tab:focus-visible {
+            outline: 2px solid var(--primary-start);
+            outline-offset: 2px;
+            box-shadow: var(--glow-primary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header - Always Shows Green Admin Badge (App Always Runs Elevated) -->
+    <div class="header">
+        <div class="header-left">
+            <img src="logo.png" alt="Dr Gates" class="company-logo">
+            <div>
+                <h1>Dr Gates</h1>
+                <div class="system-info">
+                    <span id="userInfo">Loading...</span> | 
+                    <span id="machineInfo">Loading...</span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <!-- Always show admin badge - app always runs elevated -->
+            <span class="admin-badge">
+                <i data-lucide="shield-check"></i>
+                Administrator
+            </span>
+        </div>
+    </div>
+
+    <div class="tab-container">
+        <button class="tab active" onclick="openTab(event, 'dashboard')">
+            <i data-lucide="layout-dashboard"></i>
+            Dashboard
+        </button>
+        <button class="tab" onclick="openTab(event, 'systemHealth')">
+            <i data-lucide="heart-pulse"></i>
+            System Health
+        </button>
+        <button class="tab" onclick="openTab(event, 'itServices')">
+            <i data-lucide="wrench"></i>
+            IT Services
+        </button>
+        <button class="tab" onclick="openTab(event, 'network')">
+            <i data-lucide="network"></i>
+            Network Tools
+        </button>
+        <button class="tab" onclick="openTab(event, 'support')">
+            <i data-lucide="life-buoy"></i>
+            Support
+        </button>
+    </div>
+
+    <div class="main-content">
+        <div id="dashboard" class="tab-content active">
+            <div class="health-display" id="systemHealthOutput">
+                <h2>System Status</h2>
+                <div class="health-grid">
+                    <div class="health-item" id="status-internet">
+                        <div class="health-icon pending" id="status-internet-icon">
+                            <i data-lucide="globe"></i>
+                        </div>
+                        <div class="health-text">
+                            <h3>Internet Connection</h3>
+                            <p id="status-internet-value">PENDING</p>
+                            <span class="status-details" id="status-internet-details"></span>
+                        </div>
+                    </div>
+                    <div class="health-item" id="status-security">
+                        <div class="health-icon pending" id="status-security-icon">
+                            <i data-lucide="shield"></i>
+                        </div>
+                        <div class="health-text">
+                            <h3>Security Status</h3>
+                            <p id="status-security-value">PENDING</p>
+                            <span class="status-details" id="status-security-details"></span>
+                        </div>
+                    </div>
+                    <div class="health-item" id="status-private">
+                        <div class="health-icon pending" id="status-private-icon">
+                            <i data-lucide="key"></i>
+                        </div>
+                        <div class="health-text">
+                            <h3>Private Access</h3>
+                            <p id="status-private-value">PENDING</p>
+                            <span class="status-details" id="status-private-details"></span>
+                        </div>
+                    </div>
+                    <div class="health-item" id="status-disk">
+                        <div class="health-icon pending" id="status-disk-icon">
+                            <i data-lucide="hard-drive"></i>
+                        </div>
+                        <div class="health-text">
+                            <h3>Disk Health</h3>
+                            <p id="status-disk-value">PENDING</p>
+                            <span class="status-details" id="status-disk-details"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i data-lucide="zap"></i>
+                        </div>
+                        <div class="card-title">Quick Actions</div>
+                    </div>
+                    <div class="button-group">
+                        <button onclick="runCommand('check_system_connectivity')">
+                            <i data-lucide="search"></i>
+                            <span>Run System Health Check</span>
+                        </button>
+                        <button onclick="runCommand('system_info')">
+                            <i data-lucide="monitor"></i>
+                            <span>View System Information</span>
+                        </button>
+                        <button onclick="runCommand('performance_report')">
+                            <i data-lucide="activity"></i>
+                            <span>Performance Report</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i data-lucide="sparkles"></i>
+                        </div>
+                        <div class="card-title">Common Tasks</div>
+                    </div>
+                    <div class="button-group">
+                        <button onclick="runCommand('teams_cache_clear')">
+                            <i data-lucide="message-square"></i>
+                            <span>Clear Teams Cache</span>
+                        </button>
+                        <button onclick="runCommand('clear_browser_cache')">
+                            <i data-lucide="globe"></i>
+                            <span>Clear Browser Cache</span>
+                        </button>
+                        <button onclick="runCommand('network_diagnostics')">
+                            <i data-lucide="wifi"></i>
+                            <span>Network Diagnostics</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="systemHealth" class="tab-content">
+            <div class="dashboard-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i data-lucide="cpu"></i>
+                        </div>
+                        <div class="card-title">System Information</div>
+                    </div>
+                    <div class="button-group">
+                        <button onclick="runCommand('check_account_status')">
+                            <i data-lucide="user"></i>
+                            <span>Account Status</span>
+                        </button>
+                        <button onclick="runCommand('system_info')">
+                            <i data-lucide="monitor"></i>
+                            <span>System Information</span>
+                        </button>
+                        <button onclick="runCommand('installed_software')">
+                            <i data-lucide="package"></i>
+                            <span>Installed Software</span>
+                        </button>
+                        <button onclick="runCommand('startup_programs')">
+                            <i data-lucide="power"></i>
+                            <span>Startup Programs</span>
+                        </button>
+                        <button onclick="runCommand('battery-status')">
+                            <i data-lucide="battery"></i>
+                            <span>Battery Status</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i data-lucide="shield-check"></i>
+                        </div>
+                        <div class="card-title">Network & Security</div>
+                    </div>
+                    <div class="button-group">
+                        <button onclick="runCommand('check_network')">
+                            <i data-lucide="network"></i>
+                            <span>Network Information</span>
+                        </button>
+                        <button onclick="runCommand('check_zscaler')">
+                            <i data-lucide="lock"></i>
+                            <span>Zscaler Status</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i data-lucide="database"></i>
+                        </div>
+                        <div class="card-title">Storage & Updates</div>
+                    </div>
+                    <div class="button-group">
+                        <button onclick="runCommand('disk_info')">
+                            <i data-lucide="hard-drive"></i>
+                            <span>Disk Information</span>
+                        </button>
+                        <button onclick="runCommand('windows_update_status')">
+                            <i data-lucide="refresh-cw"></i>
+                            <span>Windows Update Status</span>
+                        </button>
+                        <button onclick="runCommand('event_log_errors')">
+                            <i data-lucide="alert-circle"></i>
+                            <span>Event Log Errors</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="itServices" class="tab-content">
+            <div class="dashboard-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i data-lucide="trash-2"></i>
+                        </div>
+                        <div class="card-title">Cleanup & Maintenance</div>
+                    </div>
+                    <div class="button-group">
+                        <button onclick="runCommand('teams_cache_clear')">
+                            <i data-lucide="message-square"></i>
+                            <span>Clear Teams Cache</span>
+                        </button>
+                        <button onclick="runCommand('clear_browser_cache')">
+                            <i data-lucide="globe"></i>
+                            <span>Clear Browser Cache</span>
+                        </button>
+                        <button onclick="runCommand('clear-all-cache')">
+                            <i data-lucide="trash"></i>
+                            <span>Clear All Cache</span>
+                        </button>
+                        <button onclick="runCommand('disk_cleanup')" class="admin-required">
+                            <i data-lucide="disc"></i>
+                            <span>Disk Cleanup</span>
+                            <span class="button-admin-badge">
+                                <i data-lucide="lock"></i>
+                                Admin
+                            </span>
+                        </button>
+                        <button onclick="runCommand('temp_files_cleanup')" class="admin-required">
+                            <i data-lucide="folder-x"></i>
+                            <span>Temp Files Cleanup</span>
+                            <span class="button-admin-badge">
+                                <i data-lucide="lock"></i>
+                                Admin
+                            </span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i data-lucide="refresh-ccw"></i>
+                        </div>
+                        <div class="card-title">System Updates</div>
+                    </div>
+                    <div class="button-group">
+                        <button onclick="runCommand('gpupdate')" class="admin-required">
+                            <i data-lucide="settings"></i>
+                            <span>Group Policy Update</span>
+                            <span class="button-admin-badge">
+                                <i data-lucide="lock"></i>
+                                Admin
+                            </span>
+                        </button>
+                        <button onclick="runCommand('intune_sync')" class="admin-required">
+                            <i data-lucide="cloud"></i>
+                            <span>Intune Sync</span>
+                            <span class="button-admin-badge">
+                                <i data-lucide="lock"></i>
+                                Admin
+                            </span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i data-lucide="code"></i>
+                        </div>
+                        <div class="card-title">Developer Tools</div>
+                    </div>
+                    <div class="button-group">
+                        <!-- Claude Code Deployment Button -->
+                        <button onclick="runCommand('deploy-claudecode')" class="admin-required">
+                            <i data-lucide="cloud-download"></i>
+                            <span>Deploy Claude Code</span>
+                            <span class="button-admin-badge">
+                                <i data-lucide="lock"></i>
+                                Admin
+                            </span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i data-lucide="wrench"></i>
+                        </div>
+                        <div class="card-title">Fixes & Repairs</div>
+                    </div>
+                    <div class="button-group">
+                        <button onclick="runCommand('fix-sso')">
+                            <i data-lucide="key-round"></i>
+                            <span>Fix SSO Issues</span>
+                        </button>
+                        <button onclick="runCommand('check-onedrive-backup')">
+                            <i data-lucide="cloud-check"></i>
+                            <span>Check OneDrive Backup</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="network" class="tab-content">
+            <div class="dashboard-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i data-lucide="router"></i>
+                        </div>
+                        <div class="card-title">Network Diagnostics</div>
+                    </div>
+                    <div class="button-group">
+                        <button onclick="runCommand('network_diagnostics')">
+                            <i data-lucide="search"></i>
+                            <span>Network Diagnostics</span>
+                        </button>
+                        <button onclick="runCommand('check_network')">
+                            <i data-lucide="network"></i>
+                            <span>Network Information</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i data-lucide="printer"></i>
+                        </div>
+                        <div class="card-title">Printers</div>
+                    </div>
+                    <div class="button-group">
+                        <button onclick="runCommand('view_printers')">
+                            <i data-lucide="printer"></i>
+                            <span>View Printers</span>
+                        </button>
+                        <button onclick="runCommand('map_printers')">
+                            <i data-lucide="map"></i>
+                            <span>Map Network Printers</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i data-lucide="wrench"></i>
+                        </div>
+                        <div class="card-title">Network Fixes</div>
+                    </div>
+                    <div class="button-group">
+                        <button onclick="runCommand('dns_flush')" class="admin-required">
+                            <i data-lucide="rotate-ccw"></i>
+                            <span>DNS Flush</span>
+                            <span class="button-admin-badge">
+                                <i data-lucide="lock"></i>
+                                Admin
+                            </span>
+                        </button>
+                        <button onclick="runCommand('reset_network')" class="admin-required danger">
+                            <i data-lucide="alert-triangle"></i>
+                            <span>Reset Network</span>
+                            <span class="button-admin-badge">
+                                <i data-lucide="lock"></i>
+                                Admin
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="support" class="tab-content">
+            <div class="support-banner">
+                <h3>
+                    <i data-lucide="headphones"></i>
+                    IT Support
+                </h3>
+                <div class="support-info">
+                    <div class="support-item">
+                        <i data-lucide="mail"></i>
+                        <span id="supportEmail">support@capitecbank.co.za</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i data-lucide="ticket"></i>
+                        </div>
+                        <div class="card-title">Create Support Ticket</div>
+                    </div>
+                    <div class="button-group">
+                        <button onclick="createSoftwareTicket()">
+                            <i data-lucide="laptop"></i>
+                            <span>Software Support</span>
+                        </button>
+                        <button onclick="createHardwareTicket()">
+                            <i data-lucide="pc-case"></i>
+                            <span>Hardware Support</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="activity-log-container">
+            <div class="log-header">
+                <h3>
+                    <i data-lucide="terminal"></i>
+                    Activity Log
+                </h3>
+                <div class="log-controls">
+                    <button class="secondary" onclick="clearLog()">
+                        <i data-lucide="trash-2"></i>
+                        <span>Clear Log</span>
+                    </button>
+                    <button class="secondary" onclick="copyLog()">
+                        <i data-lucide="copy"></i>
+                        <span>Copy Log</span>
+                    </button>
+                </div>
+            </div>
+            <pre id="log" class="activity-log">Dr Gates initialized. Running as Administrator.\nWaiting for commands...</pre>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        } else {
+            console.error('Lucide icons not loaded! Make sure lucide.min.js is in the WebAssets folder.');
+        }
+
+        let appConfig = {};
+
+        window.initializeApp = function(config) {
+            appConfig = config;
+            document.getElementById('userInfo').textContent = 'User: ' + config.userName;
+            document.getElementById('machineInfo').textContent = 'Machine: ' + config.machineName;
+            document.getElementById('supportEmail').textContent = config.supportEmail;
+            
+            // Reinitialize icons after DOM update
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        };
+
+        // Handle messages from C# backend
+        window.chrome.webview.addEventListener('message', (event) => {
+            const message = event.data;
+            
+            // Simplified admin status handling - app always runs elevated
+            if (message.startsWith('ADMIN_STATUS:')) {
+                const isAdmin = message.substring(13) === 'True';
+                if (!isAdmin) {
+                    console.warn('WARNING: App should always run as administrator!');
+                    showNotification('App not running with admin privileges - some features may not work', 'warning');
+                }
+                return;
+            }
+            
+            // Pass to existing update log handler
+            updateLog(message);
+        });
+
+        function showNotification(message, type) {
+            const iconMap = {
+                success: 'check-circle',
+                warning: 'alert-triangle',
+                error: 'x-circle',
+                info: 'info'
+            };
+            
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.innerHTML = `<i data-lucide="${iconMap[type]}"></i><span>${message}</span>`;
+            
+            document.body.appendChild(notification);
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideInNotification 0.4s cubic-bezier(0.4, 0, 0.2, 1) reverse';
+                setTimeout(() => notification.remove(), 300);
+            }, 5000);
+        }
+
+        function openTab(evt, tabName) {
+            const tabs = document.querySelectorAll('.tab');
+            const contents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            contents.forEach(content => content.classList.remove('active'));
+            
+            evt.currentTarget.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        function runCommand(command) {
+            const log = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            log.textContent = '[' + timestamp + '] Executing: ' + command + '...\n';
+            
+            window.chrome.webview.postMessage(command);
+        }
+
+        // Function to update status cards in real-time
+        function updateStatus(section, status, details) {
+            const card = document.getElementById(`status-${section}`);
+            const icon = document.getElementById(`status-${section}-icon`);
+            const valueEl = document.getElementById(`status-${section}-value`);
+            const detailsEl = document.getElementById(`status-${section}-details`);
+            
+            if (!card || !icon || !valueEl || !detailsEl) {
+                return;
+            }
+            
+            // Remove all status classes
+            card.classList.remove('status-checking', 'status-connected', 'status-active', 
+                                  'status-healthy', 'status-error', 'status-critical', 
+                                  'status-warning', 'status-inactive');
+            icon.classList.remove('pending', 'success', 'warning', 'error');
+            
+            // Add appropriate status class
+            const statusClass = `status-${status.toLowerCase()}`;
+            card.classList.add(statusClass);
+            
+            // Add appropriate icon class
+            let iconClass = 'pending';
+            if (status === 'CONNECTED' || status === 'ACTIVE' || status === 'HEALTHY') {
+                iconClass = 'success';
+            } else if (status === 'ERROR' || status === 'CRITICAL') {
+                iconClass = 'error';
+            } else if (status === 'WARNING' || status === 'INACTIVE') {
+                iconClass = 'warning';
+            }
+            icon.classList.add(iconClass);
+            
+            // Update text
+            valueEl.textContent = status.toUpperCase();
+            detailsEl.textContent = details || '';
+        }
+
+        function updateLog(message) {
+            const log = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            
+            // Check if message contains STATUS_UPDATE
+            if (message.includes('STATUS_UPDATE:')) {
+                const statusUpdateRegex = /STATUS_UPDATE:(\{[^}]+\})/g;
+                let match;
+                let foundUpdates = false;
+                
+                while ((match = statusUpdateRegex.exec(message)) !== null) {
+                    foundUpdates = true;
+                    try {
+                        const jsonStr = match[1];
+                        const statusData = JSON.parse(jsonStr);
+                        updateStatus(statusData.section, statusData.status, statusData.details);
+                    } catch (e) {
+                        console.error('[ERROR] Failed to parse:', match[0], e);
+                    }
+                }
+                
+                if (foundUpdates) {
+                    log.textContent += '[' + timestamp + '] ✓ Status updates processed\n';
+                    log.scrollTop = log.scrollHeight;
+                    return;
+                }
+            }
+            
+            // Handle update-div messages
+            if (message.startsWith("update-div:")) {
+                const parts = message.split(":");
+                const divId = parts[1];
+                
+                if (divId === 'systemHealthOutput') {
+                    log.textContent += '[' + timestamp + '] ✓ Health check completed\n';
+                } else {
+                    log.textContent += '[' + timestamp + '] ✓ Updated ' + divId + '\n';
+                }
+            } else {
+                // Regular message
+                const cleanMessage = message
+                    .split('\n')
+                    .filter(line => !line.includes('STATUS_UPDATE:'))
+                    .filter(line => line.trim().length > 0)
+                    .join('\n');
+                
+                if (cleanMessage.trim().length > 0) {
+                    log.textContent += '[' + timestamp + '] ' + cleanMessage + '\n';
+                }
+            }
+            
+            log.scrollTop = log.scrollHeight;
+        }
+
+        function clearLog() {
+            document.getElementById('log').textContent = 'Activity log cleared.\nDr Gates running as Administrator.';
+        }
+
+        function copyLog() {
+            const log = document.getElementById('log');
+            navigator.clipboard.writeText(log.textContent);
+            showNotification('Log copied to clipboard!', 'success');
+        }
+
+        // Software support ticket
+        function createSoftwareTicket() {
+            runCommand('create-software-ticket');
+            setTimeout(() => {
+                window.open('https://itsm-capitecbank.ivanticloud.com/?Scope=SelfService&CommandId=NewServiceRequestByOfferingId&Tab=ServiceCatalog&Template=B488BA74A8894281AC5F330AA2DBA3C3', '_blank');
+            }, 2000);
+        }
+
+        // Hardware support ticket
+        function createHardwareTicket() {
+            runCommand('create-hardware-ticket');
+            setTimeout(() => {
+                window.open('https://itsm-capitecbank.ivanticloud.com/?Scope=SelfService&CommandId=NewServiceRequestByOfferingId&Tab=ServiceCatalog&Template=EBF27091BB864B7884A597A518AA1B45', '_blank');
+            }, 2000);
+        }
+
+        // On page load - simplified (app always elevated)
+        window.onload = function() {
+            // Initialize all icons first
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+            
+            // Request admin status check from C# (should always be true)
+            if (window.chrome?.webview) {
+                window.chrome.webview.postMessage('CHECK_ADMIN_STATUS');
+                
+                // Auto-run system health check after a short delay
+                setTimeout(function() {
+                    runCommand('check_system_connectivity');
+                }, 1000);
+            }
+        };
+    </script>
+</body>
+</html>

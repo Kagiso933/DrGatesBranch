@@ -1,0 +1,25 @@
+====================================================================
+    ENTERPRISE IT UTILITY TOOL - COMPLETE PROJECT
+====================================================================
+
+📁 FOLDER STRUCTURE
+-------------------------------------------------------------------
+├── UtilityTool.csproj          Project file
+├── *.xaml, *.cs                WPF application files
+├── Core/                       C# classes (3 files)
+├── Scripts/                    PowerShell scripts (25+ files)
+├── WebAssets/                  Web interface
+├── Config/                     Configuration
+└── Documentation/              Complete docs (3 files)
+
+📖 START HERE
+-------------------------------------------------------------------
+1. READ: Documentation/PROJECT_SUMMARY.md
+2. READ: Documentation/README.md
+3. BUILD: dotnet build --configuration Release
+
+✨ FEATURES: 25+ automation scripts, modern UI, logging, audit
+🎯 PURPOSE: Self-service IT tool for Windows support
+
+See Documentation folder for complete guides!
+====================================================================

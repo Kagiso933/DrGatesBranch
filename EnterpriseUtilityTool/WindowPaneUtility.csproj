@@ -1,0 +1,65 @@
+
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>Assets\UTLogo.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <Version>2.0.0</Version>
+    <Company>Capitec Bank LTD</Company>
+    <Product>WindowPane Utility</Product>
+    <Copyright>Copyright © 2026</Copyright>
+    <AssemblyName>WindowPaneUtility</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- WebView2 for modern UI -->
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3179.45" />
+    
+    <!-- Logging -->
+    <PackageReference Include="Serilog" Version="4.2.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
+    
+    <!-- Configuration -->
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.0" />
+    
+    <!-- Dependency Injection -->
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />
+    
+    <!-- Active Directory -->
+    <PackageReference Include="System.DirectoryServices.AccountManagement" Version="9.0.0" />
+    
+    <!-- JSON handling -->
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Copy Scripts to output -->
+    <None Include="Scripts\**" CopyToOutputDirectory="PreserveNewest" Link="Scripts\%(RecursiveDir)%(Filename)%(Extension)" />
+    
+    <!-- Copy Web Assets to output -->
+    <None Include="WebAssets\**" CopyToOutputDirectory="Always" Link="WebAssets\%(RecursiveDir)%(Filename)%(Extension)" />
+    
+    <!-- Copy Config files -->
+    <None Include="Config\**" CopyToOutputDirectory="Always" Link="Config\%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="WebAssets\**">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\**">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\**">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>
