@@ -39,6 +39,13 @@ namespace DrGates
             // CRITICAL: Subscribe to real-time output events
             _scriptExecutor.OutputLineReceived += OnScriptOutputReceived;
             
+            // Auto-enable Branch User Mode for non-admin users
+            if (!_isAdmin)
+            {
+                ConfigurationManager.Config.FeatureFlags.BranchUsersMode = true;
+                Logger.Info("Branch User Mode automatically enabled (running as standard user)");
+            }
+
             _isAdmin = CheckAdminPrivileges();
             
             InitializeAsync();
@@ -135,6 +142,7 @@ namespace DrGates
         {
             try
             {
+                var featureFlags = ConfigurationManager.Config.FeatureFlags;
                 var config = new
                 {
                     isAdmin = _isAdmin,
@@ -142,6 +150,15 @@ namespace DrGates
                     machineName = Environment.MachineName,
                     organizationName = ConfigurationManager.Config.OrganizationName,
                     supportEmail = ConfigurationManager.Config.SupportEmail,
+                    branchUsersMode = featureFlags.BranchUsersMode,
+                    hideDiskCleanup = featureFlags.HideDiskCleanup,
+                    hideTempCleanup = featureFlags.HideTempCleanup,
+                    hideResetNetwork = featureFlags.HideResetNetwork,
+                    hideDeployClaudeCode = featureFlags.HideDeployClaudeCode,
+                    hideGPUpdate = featureFlags.HideGPUpdate,
+                    hideDNSFlush = featureFlags.HideDNSFlush,
+                    showSCCMSync = featureFlags.ShowSCCMSync,
+                    showIntuneSyncForAll = featureFlags.ShowIntuneSyncForAll
                 };
 
                 var script = $"window.initializeApp({Newtonsoft.Json.JsonConvert.SerializeObject(config)});";
@@ -224,11 +241,12 @@ namespace DrGates
                 { "battery-status", ("Get-BatteryStatus.ps1", "log", false) },
                 { "create-software-ticket", ("New-SupportTicket.ps1", "log", false) },
                 { "create-hardware-ticket", ("New-SupportTicket.ps1", "log", false) },
-                
+                { "check_dell_updates", ("Check-DellUpdates.ps1", "log", false) },
+                { "install_dell_updates", ("Install-DellUpdates.ps1", "log", true) },
                 // Claude Code Deployment - with AutoContinue parameter
                 { "deploy-claudecode", ("Run-ClaudeCodeSetup.ps1", "log", true) },
                 
-                { "firewall_status", ("FirewallStatus.ps1", "log", false) }
+                { "check_uptime", ("Get-SystemUptime.ps1", "log", false) }
             };
 
             if (scriptMap.TryGetValue(command, out var scriptInfo))

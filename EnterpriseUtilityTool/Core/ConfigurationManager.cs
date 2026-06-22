@@ -4,6 +4,20 @@ using System.IO;
 
 namespace DrGates.Core
 {
+    public class FeatureFlags
+    {
+        public bool BranchUsersMode { get; set; } = false;
+        public bool HideDiskCleanup { get; set; } = false;
+        public bool HideTempCleanup { get; set; } = false;
+        public bool HideResetNetwork { get; set; } = false;
+        public bool HideDeployClaudeCode { get; set; } = false;
+        public bool HideInstallDellUpdates { get; set; } = false;
+        public bool HideGPUpdate { get; set; } = false;
+        public bool HideDNSFlush { get; set; } = false;
+        public bool ShowSCCMSync { get; set; } = true;
+        public bool ShowIntuneSyncForAll { get; set; } = true;
+        public string CompanyPortalSyncMethod { get; set; } = "Intune";
+    }
     public class AppConfig
     {
         public string OrganizationName { get; set; } = "Capitec Bank";
@@ -16,6 +30,7 @@ namespace DrGates.Core
         public bool RequireAdminForDangerousOperations { get; set; } = true;
         public string CompanyLogoPath { get; set; } = "webassets/logo.png";
         public ScriptSettings Scripts { get; set; } = new ScriptSettings();
+        public FeatureFlags FeatureFlags { get; set; } = new FeatureFlags();
     }
 
     public class ScriptSettings

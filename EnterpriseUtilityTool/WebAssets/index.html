@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dr Gates</title>
-    <!-- Lucide Icons - LOCAL FILE (download from https://unpkg.com/lucide@latest/dist/umd/lucide.min.js) -->
     <script src="lucide.min.js"></script>
     <style>
         :root {
@@ -221,7 +220,7 @@
             font-weight: 400;
         }
 
-        /* Admin Badge - Always Green (App Always Elevated) */
+        /* Admin Badge */
         .admin-badge {
             background: var(--gradient-success);
             color: white;
@@ -595,15 +594,15 @@
 
         .health-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
         }
 
         .health-item {
             display: flex;
             align-items: center;
-            gap: 16px;
-            padding: 24px;
+            gap: 14px;
+            padding: 18px;
             background: var(--glass-bg);
             backdrop-filter: blur(10px);
             border-radius: var(--radius-md);
@@ -636,8 +635,8 @@
         }
 
         .health-icon {
-            width: 64px;
-            height: 64px;
+            width: 52px;
+            height: 52px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -969,10 +968,10 @@
             outline-offset: 2px;
             box-shadow: var(--glow-primary);
         }
+        
     </style>
 </head>
 <body>
-    <!-- Header - Always Shows Green Admin Badge (App Always Runs Elevated) -->
     <div class="header">
         <div class="header-left">
             <img src="logo.png" alt="Dr Gates" class="company-logo">
@@ -985,10 +984,9 @@
             </div>
         </div>
         <div>
-            <!-- Always show admin badge - app always runs elevated -->
-            <span class="admin-badge">
+            <span class="admin-badge" id="topAdminBadge">
                 <i data-lucide="shield-check"></i>
-                Administrator
+                <span id="badgeText">Checking...</span>
             </span>
         </div>
     </div>
@@ -1018,6 +1016,21 @@
 
     <div class="main-content">
         <div id="dashboard" class="tab-content active">
+            
+            <div class="card" id="elevationCard" style="border: 2px solid var(--warning-start); display: none; margin-bottom: 24px; padding: 20px;">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div style="background: var(--warning-start); padding: 10px; border-radius: 10px; color: white; display: flex;"><i data-lucide="shield-alert"></i></div>
+                    <div style="flex-grow: 1;">
+                        <h3 style="margin: 0; font-size: 16px; color: var(--text-primary);">Standard User Mode Detected</h3>
+                        <p style="margin: 0; font-size: 12px; color: var(--text-secondary);">Some tools will require individual UAC prompts. Please relaunch running as admin to elevate the entire session.</p>
+                    </div>
+                   <!-- <button onclick="runCommand('RESTART_AS_ADMIN')" class="danger" style="margin-left: auto;">
+                        <i data-lucide="shield-check"></i>
+                        <span>Elevate App</span>
+                    </button>-->
+                </div>
+            </div>
+
             <div class="health-display" id="systemHealthOutput">
                 <h2>System Status</h2>
                 <div class="health-grid">
@@ -1061,9 +1074,19 @@
                             <span class="status-details" id="status-disk-details"></span>
                         </div>
                     </div>
+                    <div class="health-item" id="status-uptime">
+                        <div class="health-icon pending" id="status-uptime-icon">
+                            <i data-lucide="clock"></i>
+                        </div>
+                        <div class="health-text">
+                            <h3>System Uptime</h3>
+                            <p id="status-uptime-value">Checking...</p>
+                            <span class="status-details" id="status-uptime-details">Last restart: Unknown</span>
+                        </div>
+                    </div>
                 </div>
             </div>
-
+           
             <div class="dashboard-grid">
                 <div class="card">
                     <div class="card-header">
@@ -1181,6 +1204,18 @@
                             <i data-lucide="refresh-cw"></i>
                             <span>Windows Update Status</span>
                         </button>
+                      <!--  <button onclick="runCommand('check_dell_updates')">
+                                <i data-lucide="laptop"></i>
+                                Check Dell Updates
+                        </button>
+                        <button  id="btn-install-dell-updates" onclick="runCommand('install_dell_updates')">
+                                <i data-lucide="download"></i>
+                               <span>Install Dell Updates</span>
+                                <span class="button-admin-badge">  <i data-lucide="lock"></i>
+                                Admin</span>
+                            </span>
+                        </button>-->
+                        </button>
                         <button onclick="runCommand('event_log_errors')">
                             <i data-lucide="alert-circle"></i>
                             <span>Event Log Errors</span>
@@ -1212,7 +1247,7 @@
                             <i data-lucide="trash"></i>
                             <span>Clear All Cache</span>
                         </button>
-                        <button onclick="runCommand('disk_cleanup')" class="admin-required">
+                        <button  id="btn-disk-cleanup" onclick="runCommand('disk_cleanup')" class="admin-required">
                             <i data-lucide="disc"></i>
                             <span>Disk Cleanup</span>
                             <span class="button-admin-badge">
@@ -1220,7 +1255,7 @@
                                 Admin
                             </span>
                         </button>
-                        <button onclick="runCommand('temp_files_cleanup')" class="admin-required">
+                        <button  id="btn-temp-cleanup" onclick="runCommand('temp_files_cleanup')" class="admin-required">
                             <i data-lucide="folder-x"></i>
                             <span>Temp Files Cleanup</span>
                             <span class="button-admin-badge">
@@ -1239,15 +1274,7 @@
                         <div class="card-title">System Updates</div>
                     </div>
                     <div class="button-group">
-                        <button onclick="runCommand('gpupdate')" class="admin-required">
-                            <i data-lucide="settings"></i>
-                            <span>Group Policy Update</span>
-                            <span class="button-admin-badge">
-                                <i data-lucide="lock"></i>
-                                Admin
-                            </span>
-                        </button>
-                        <button onclick="runCommand('intune_sync')" class="admin-required">
+                       <button  id="btn-intune-sync" onclick="runCommand('intune_sync')" class="admin-required">
                             <i data-lucide="cloud"></i>
                             <span>Intune Sync</span>
                             <span class="button-admin-badge">
@@ -1255,28 +1282,63 @@
                                 Admin
                             </span>
                         </button>
+                        <button id="btn-sccm-sync" onclick="runCommand('sccm_sync')" class="admin-required">
+    <i data-lucide="hard-drive"></i>
+    <span>SCCM Sync</span>
+    <span class="button-admin-badge">
+        <i data-lucide="lock"></i>
+        Admin
+    </span>
+</button>
+                        
                     </div>
                 </div>
 
-                <div class="card">
+                <!--<div class="card">
                     <div class="card-header">
                         <div class="card-icon">
                             <i data-lucide="code"></i>
                         </div>
-                        <div class="card-title">Developer Tools</div>
+                       - <div class="card-title">Developer Tools</div>
+
                     </div>
+                    
                     <div class="button-group">
-                        <!-- Claude Code Deployment Button -->
-                        <button onclick="runCommand('deploy-claudecode')" class="admin-required">
-                            <i data-lucide="cloud-download"></i>
-                            <span>Deploy Claude Code</span>
-                            <span class="button-admin-badge">
-                                <i data-lucide="lock"></i>
-                                Admin
-                            </span>
-                        </button>
-                    </div>
-                </div>
+
+    <button  id="btn-deploy-claudecode" onclick="runCommand('deploy-claudecode')" class="admin-required">
+        <i data-lucide="cloud-download"></i>
+        <span>Deploy Claude Code</span>
+
+        <span class="button-admin-badge">
+            <i data-lucide="lock"></i>
+            Admin
+        </span>
+    </button>
+
+    <div class="button-requirements">
+        <strong>Prerequisites</strong>
+
+        <ul>
+            <li>
+                <strong>User groups</strong>
+                <ul>
+                    <li><code>G_Claude_General_User</code></li>
+                    <li><code>G_AWS_BedRock_Users</code></li>
+                </ul>
+            </li>
+
+            <li>
+                <strong>Local admin / elevation</strong>
+                <ul>
+                    <li><code>AP_Campus.PROD.Windows.App.BeyondTrustEPMClient.Required</code></li>
+                    <li><code>G_Campus.PROD.Windows.App.BeyondTrustEPM</code></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+</div>
+                </div>-->
 
                 <div class="card">
                     <div class="card-header">
@@ -1294,6 +1356,25 @@
                             <i data-lucide="cloud-check"></i>
                             <span>Check OneDrive Backup</span>
                         </button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i data-lucide="key-round"></i>
+                        </div>
+                        <div class="card-title">Password Reset (Self-Service)</div>
+                    </div>
+                    <div class="button-group">
+                        <button onclick="openSSPRInApp()">
+                            <i data-lucide="shield-check"></i>
+                            <span>Reset My Password</span>
+                        </button>
+                    <!-- <button onclick="openSSPRForUser()">
+                            <i data-lucide="user-cog"></i>
+                            <span>Help User Reset Password</span>
+                        </button>*/-->
                     </div>
                 </div>
             </div>
@@ -1339,7 +1420,7 @@
                     </div>
                 </div>
 
-                <div class="card">
+                <!--<div class="card">
                     <div class="card-header">
                         <div class="card-icon">
                             <i data-lucide="wrench"></i>
@@ -1347,7 +1428,7 @@
                         <div class="card-title">Network Fixes</div>
                     </div>
                     <div class="button-group">
-                        <button onclick="runCommand('dns_flush')" class="admin-required">
+                        <button id="btn-dns-flush" onclick="runCommand('dns_flush')" class="admin-required">
                             <i data-lucide="rotate-ccw"></i>
                             <span>DNS Flush</span>
                             <span class="button-admin-badge">
@@ -1355,7 +1436,7 @@
                                 Admin
                             </span>
                         </button>
-                        <button onclick="runCommand('reset_network')" class="admin-required danger">
+                        <button id="btn-reset-network" onclick="runCommand('reset_network')" class="admin-required danger">
                             <i data-lucide="alert-triangle"></i>
                             <span>Reset Network</span>
                             <span class="button-admin-badge">
@@ -1364,7 +1445,7 @@
                             </span>
                         </button>
                     </div>
-                </div>
+                </div>-->
             </div>
         </div>
 
@@ -1377,7 +1458,7 @@
                 <div class="support-info">
                     <div class="support-item">
                         <i data-lucide="mail"></i>
-                        <span id="supportEmail">support@capitecbank.co.za</span>
+                        <span id="supportEmail"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1f6c6a6f6f706d6b5f7c7e6f766b7a7c7d7e7174317c7031657e">[email&#160;protected]</a></span>
                     </div>
                 </div>
             </div>
@@ -1436,10 +1517,17 @@
         let appConfig = {};
 
         window.initializeApp = function(config) {
+            console.log('[DEBUG] initializeApp called with config:', config);
             appConfig = config;
-            document.getElementById('userInfo').textContent = 'User: ' + config.userName;
-            document.getElementById('machineInfo').textContent = 'Machine: ' + config.machineName;
-            document.getElementById('supportEmail').textContent = config.supportEmail;
+            
+            try {
+                document.getElementById('userInfo').textContent = 'User: ' + config.userName;
+                document.getElementById('machineInfo').textContent = 'Machine: ' + config.machineName;
+                document.getElementById('supportEmail').textContent = config.supportEmail;
+                console.log('[DEBUG] UI updated successfully');
+            } catch (e) {
+                console.error('[ERROR] Failed to update UI:', e);
+            }
             
             // Reinitialize icons after DOM update
             if (typeof lucide !== 'undefined') {
@@ -1448,22 +1536,39 @@
         };
 
         // Handle messages from C# backend
-        window.chrome.webview.addEventListener('message', (event) => {
-            const message = event.data;
-            
-            // Simplified admin status handling - app always runs elevated
-            if (message.startsWith('ADMIN_STATUS:')) {
-                const isAdmin = message.substring(13) === 'True';
-                if (!isAdmin) {
-                    console.warn('WARNING: App should always run as administrator!');
-                    showNotification('App not running with admin privileges - some features may not work', 'warning');
+        if (window.chrome && window.chrome.webview) {
+            window.chrome.webview.addEventListener('message', (event) => {
+                const message = event.data;
+                
+               // NEW ADMIN LOGIC INJECTED HERE
+                if (message.startsWith('ADMIN_STATUS:')) {
+                    const isAdmin = message.substring(13).trim() === 'True'; 
+                    const card = document.getElementById('elevationCard');
+                    const badge = document.getElementById('topAdminBadge');
+                    const badgeText = document.getElementById('badgeText');
+                    
+                    if (isAdmin) {
+                        if (card) card.style.display = 'none';
+                        if (badge) badge.style.background = 'var(--gradient-success)';
+                        if (badgeText) badgeText.textContent = 'Administrator';
+                    } else {
+                        if (card) card.style.display = 'flex';
+                        if (badge) badge.style.background = 'var(--gradient-warning)';
+                        if (badgeText) badgeText.textContent = 'Standard User';
+                    }
+                    
+                    if (typeof lucide !== 'undefined') {
+                        lucide.createIcons();
+                    }
+                    return;
                 }
-                return;
-            }
-            
-            // Pass to existing update log handler
-            updateLog(message);
-        });
+                
+                // Pass to existing update log handler
+                updateLog(message);
+            });
+        } else {
+            console.error('[ERROR] WebView2 not available - cannot set up message listener');
+        }
 
         function showNotification(message, type) {
             const iconMap = {
@@ -1623,24 +1728,264 @@
                 window.open('https://itsm-capitecbank.ivanticloud.com/?Scope=SelfService&CommandId=NewServiceRequestByOfferingId&Tab=ServiceCatalog&Template=EBF27091BB864B7884A597A518AA1B45', '_blank');
             }, 2000);
         }
+// Global uptime data
+let currentUptimeData = null;
 
-        // On page load - simplified (app always elevated)
+// Auto-check uptime on page load
+window.addEventListener('load', function() {
+    setTimeout(function() {
+        runCommand('check_uptime');
+    }, 2000); // Check 2 seconds after startup
+});
+
+// Function to update uptime display
+function updateUptimeDisplay(data) {
+    console.log('[UPTIME] updateUptimeDisplay called with data:', data);
+    currentUptimeData = data;
+    
+    try {
+        // Format uptime display (main value)
+        let uptimeText = '';
+        if (data.days === 0 && data.hours === 0) {
+            uptimeText = `${data.minutes} minutes`;
+        } else if (data.days === 0) {
+            uptimeText = `${data.hours}h ${data.minutes}m`;
+        } else {
+            uptimeText = `${data.days} days, ${data.hours} hours`;
+        }
+        
+        // Get DOM elements (health-item pattern)
+        const iconEl = document.getElementById('status-uptime-icon');
+        const valueEl = document.getElementById('status-uptime-value');
+        const detailsEl = document.getElementById('status-uptime-details');
+        
+        console.log('[UPTIME] DOM elements found:', {
+            iconEl: !!iconEl,
+            valueEl: !!valueEl,
+            detailsEl: !!detailsEl
+        });
+        
+        if (!iconEl || !valueEl || !detailsEl) {
+            console.error('[UPTIME] Required DOM elements not found!');
+            return;
+        }
+        
+        // Update value and details
+        valueEl.textContent = uptimeText;
+        detailsEl.textContent = `Last restart: ${data.lastBootTime}`;
+        
+        // Remove all status classes
+        iconEl.classList.remove('pending', 'success', 'warning', 'error');
+        
+        // Apply status class based on uptime
+        if (data.status === 'CRITICAL') {
+            // Critical - 14+ days
+            iconEl.classList.add('error');
+            console.log('[UPTIME] Status: CRITICAL (error class)');
+            
+            // Show notification banner
+            if (typeof showUptimeNotification === 'function') {
+                showUptimeNotification('critical', data.days);
+            }
+            
+        } else if (data.status === 'WARNING') {
+            // Warning - 7-13 days
+            iconEl.classList.add('warning');
+            console.log('[UPTIME] Status: WARNING (warning class)');
+            
+            // Show notification banner
+            if (typeof showUptimeNotification === 'function') {
+                showUptimeNotification('warning', data.days);
+            }
+            
+        } else {
+            // Good or Excellent - 0-6 days
+            iconEl.classList.add('success');
+            console.log('[UPTIME] Status: GOOD/EXCELLENT (success class)');
+        }
+        
+        // Refresh lucide icons
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+        
+        console.log('[UPTIME] Update complete');
+        
+    } catch (error) {
+        console.error('[UPTIME] Error in updateUptimeDisplay:', error);
+    }
+}
+
+// Show uptime notification banner
+function showUptimeNotification(severity, days) {
+    // Check if notification was recently shown (don't spam)
+    const lastShown = localStorage.getItem('lastUptimeNotification');
+    const now = Date.now();
+    if (lastShown && (now - parseInt(lastShown)) < 86400000) {
+        // Don't show if shown in last 24 hours
+        return;
+    }
+    
+    let message = '';
+    let bgColor = '';
+    
+    if (severity === 'critical') {
+        message = `Your computer has been running for ${days} days. Restart recommended for optimal performance and security.`;
+        bgColor = 'rgba(255, 68, 68, 0.9)';
+    } else if (severity === 'warning') {
+        message = `Your computer has been running for ${days} days. Consider restarting soon.`;
+        bgColor = 'rgba(255, 165, 0, 0.9)';
+    }
+    
+    // Create notification banner
+    const banner = document.createElement('div');
+    banner.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: ${bgColor};
+        color: white;
+        padding: 16px 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        z-index: 10000;
+        max-width: 400px;
+        animation: slideInRight 0.3s ease-out;
+    `;
+    banner.innerHTML = `
+        <div style="display: flex; align-items: start; gap: 12px;">
+            <div style="flex: 1; font-size: 14px;">${message}</div>
+            <button onclick="this.parentElement.parentElement.remove()" 
+                    style="background: transparent; border: none; color: white; cursor: pointer; font-size: 20px; padding: 0; line-height: 1;">
+                ×
+            </button>
+        </div>
+    `;
+    
+    document.body.appendChild(banner);
+    
+    // Auto-remove after 10 seconds
+    setTimeout(() => {
+        if (banner.parentElement) {
+            banner.remove();
+        }
+    }, 10000);
+    
+    // Mark as shown
+    localStorage.setItem('lastUptimeNotification', now.toString());
+}
+
+// Show restart reminder modal
+function showRestartReminder() {
+    if (!currentUptimeData) return;
+    
+    const message = currentUptimeData.status === 'CRITICAL'
+        ? `Your computer has been running for ${currentUptimeData.days} days without a restart.\n\nThis can cause:\n• Memory leaks and performance issues\n• Pending updates not being applied\n• Security vulnerabilities\n• System instability\n\nPlease save your work and restart your computer as soon as possible.`
+        : `Your computer has been running for ${currentUptimeData.days} days.\n\nWe recommend restarting at least weekly to:\n• Apply pending updates\n• Clear memory\n• Improve performance\n• Maintain system stability\n\nConsider restarting at your next convenient time.`;
+    
+    alert(message);
+}
+
+// Add CSS animation
+const style = document.createElement('style');
+style.textContent = `
+@keyframes slideInRight {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+`;
+document.head.appendChild(style);
+        // ====================================================================
+        // IN-APP SSPR FUNCTIONS
+        // ====================================================================
+
+        // Open SSPR for current user
+        function openSSPRInApp() {
+            // Navigate to Microsoft SSPR portal
+            // Back button will be shown by C# (WPF overlay)
+            window.location.href = 'https://passwordreset.microsoftonline.com';
+            
+            // Notify C# backend
+            if (window.chrome && window.chrome.webview) {
+                window.chrome.webview.postMessage('SSPR_OPENED');
+            }
+        }
+
+        // Help another user reset password
+        function openSSPRForUser() {
+            var userEmail = prompt('Enter user email address:\n\nThis will open the password reset portal.\nYou can guide the user through the process.');
+            
+            if (userEmail && userEmail.trim()) {
+                var email = userEmail.trim();
+                
+                // Navigate to SSPR (email hint may or may not work)
+                window.location.href = 'https://passwordreset.microsoftonline.com/?username=' + encodeURIComponent(email);
+                
+                // Notify C# backend (will show WPF back button)
+                if (window.chrome && window.chrome.webview) {
+                    window.chrome.webview.postMessage('SSPR_OPENED_FOR_USER:' + email);
+                }
+            }
+        }
+
+        // Return to main Dr Gates dashboard
+        function backToDashboard() {
+            // Tell C# to reload the main interface
+            if (window.chrome && window.chrome.webview) {
+                window.chrome.webview.postMessage('RELOAD_DASHBOARD');
+            }
+        }
+
+        // On page load - initialize app and check for SSPR
         window.onload = function() {
+            console.log('[DEBUG] window.onload triggered');
+            
             // Initialize all icons first
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();
+                console.log('[DEBUG] Lucide icons initialized');
             }
             
-            // Request admin status check from C# (should always be true)
-            if (window.chrome?.webview) {
+            // Normal Dr Gates page - request admin status check
+            console.log('[DEBUG] On Dr Gates page - requesting admin status');
+            if (window.chrome && window.chrome.webview) {
                 window.chrome.webview.postMessage('CHECK_ADMIN_STATUS');
                 
-                // Auto-run system health check after a short delay
+                // Auto-run system health check on startup
+                console.log('[DEBUG] Auto-running system health check');
                 setTimeout(function() {
-                    runCommand('check_system_connectivity');
-                }, 1000);
+                                        runCommand('check_system_connectivity');
+                                        setTimeout(function() {
+                                            runCommand('check_uptime'); 
+                                        }, 100);
+                                      }, 500); // Small delay to ensure everything is ready
+            } else {
+                console.error('[ERROR] WebView2 not available');
             }
         };
+        // Initialize app with feature flags
+            window.initializeApp = function(config) {
+                window.config = config;
+                // Apply button visibility based on branch user mode
+                if (config.branchUsersMode) {
+                    if (config.hideDiskCleanup) document.getElementById('btn-disk-cleanup').style.display = 'none';
+                    if (config.hideTempCleanup) document.getElementById('btn-temp-cleanup').style.display = 'none';
+                    if (config.hideDeployClaudeCode) document.getElementById('btn-deploy-claudecode').style.display = 'none';
+                    if (config.hideResetNetwork) document.getElementById('btn-reset-network').style.display = 'none';
+                    if(config.hideInstallDellUpdates) document.getElementById('btn-install-dell-updates').style.display = 'none';
+                    if(config.hideDNSFlush) document.getElementById('btn-dns-flush').style.display = 'none';
+                     if (config.showSCCMSync && document.getElementById('btn-sccm-sync')) {
+            document.getElementById('btn-sccm-sync').style.display = 'flex';
+        }
+                }
+            };
     </script>
+
 </body>
 </html>
