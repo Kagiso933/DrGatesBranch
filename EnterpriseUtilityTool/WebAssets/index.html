@@ -1518,8 +1518,9 @@
 
         window.initializeApp = function(config) {
             console.log('[DEBUG] initializeApp called with config:', config);
+            window.config = config;
             appConfig = config;
-            
+
             try {
                 document.getElementById('userInfo').textContent = 'User: ' + config.userName;
                 document.getElementById('machineInfo').textContent = 'Machine: ' + config.machineName;
@@ -1528,7 +1529,18 @@
             } catch (e) {
                 console.error('[ERROR] Failed to update UI:', e);
             }
-            
+
+            // Apply button visibility based on branch user mode
+            if (config.branchUsersMode) {
+                if (config.hideDiskCleanup && document.getElementById('btn-disk-cleanup')) document.getElementById('btn-disk-cleanup').style.display = 'none';
+                if (config.hideTempCleanup && document.getElementById('btn-temp-cleanup')) document.getElementById('btn-temp-cleanup').style.display = 'none';
+                if (config.hideDeployClaudeCode && document.getElementById('btn-deploy-claudecode')) document.getElementById('btn-deploy-claudecode').style.display = 'none';
+                if (config.hideResetNetwork && document.getElementById('btn-reset-network')) document.getElementById('btn-reset-network').style.display = 'none';
+                if (config.hideGPUpdate && document.getElementById('btn-gpupdate')) document.getElementById('btn-gpupdate').style.display = 'none';
+                if (config.hideDNSFlush && document.getElementById('btn-dns-flush')) document.getElementById('btn-dns-flush').style.display = 'none';
+                if (config.showSCCMSync && document.getElementById('btn-sccm-sync')) document.getElementById('btn-sccm-sync').style.display = 'flex';
+            }
+
             // Reinitialize icons after DOM update
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();
@@ -1969,22 +1981,6 @@ document.head.appendChild(style);
                 console.error('[ERROR] WebView2 not available');
             }
         };
-        // Initialize app with feature flags
-            window.initializeApp = function(config) {
-                window.config = config;
-                // Apply button visibility based on branch user mode
-                if (config.branchUsersMode) {
-                    if (config.hideDiskCleanup) document.getElementById('btn-disk-cleanup').style.display = 'none';
-                    if (config.hideTempCleanup) document.getElementById('btn-temp-cleanup').style.display = 'none';
-                    if (config.hideDeployClaudeCode) document.getElementById('btn-deploy-claudecode').style.display = 'none';
-                    if (config.hideResetNetwork) document.getElementById('btn-reset-network').style.display = 'none';
-                    if(config.hideInstallDellUpdates) document.getElementById('btn-install-dell-updates').style.display = 'none';
-                    if(config.hideDNSFlush) document.getElementById('btn-dns-flush').style.display = 'none';
-                     if (config.showSCCMSync && document.getElementById('btn-sccm-sync')) {
-            document.getElementById('btn-sccm-sync').style.display = 'flex';
-        }
-                }
-            };
     </script>
 
 </body>
